@@ -1,3 +1,4 @@
-import * as JWTServico from './JWTServico';
+import * as bcrypt from './bcrypt';
+import * as jwt from './jwt';
 
-export const Servicos = { ...JWTServico };
+export const Servicos = { ...jwt, ...bcrypt };

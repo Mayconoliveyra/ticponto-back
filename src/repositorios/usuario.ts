@@ -15,6 +15,17 @@ const cadastrar = async (usuario: Omit<IUsuario, 'id' | 'ativo' | 'created_at' |
   }
 };
 
+const buscarPorEmail = async (email: string): Promise<IUsuario | null> => {
+  try {
+    const usuario = await Knex(ETableNames.usuarios).select('*').where('email', email).first();
+
+    return usuario || null;
+  } catch (error) {
+    Util.log.error('Erro ao buscar usuário por email', error);
+    return null;
+  }
+};
+
 const listarTodos = async () => {
   try {
     return await Knex('usuarios').select('*');
@@ -24,4 +35,4 @@ const listarTodos = async () => {
   }
 };
 
-export const Usuario = { cadastrar, listarTodos };
+export const Usuario = { cadastrar, listarTodos, buscarPorEmail };

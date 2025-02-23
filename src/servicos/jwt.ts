@@ -43,4 +43,4 @@ const verificar = (token: string): IJwtData | 'JWT_SECRET_NOT_FOUND' | 'INVALID_
   }
 };
 
-export const JWTServico = { entrar, verificar };
+export const JWT = { entrar, verificar };

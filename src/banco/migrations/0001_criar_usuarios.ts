@@ -7,8 +7,9 @@ export async function up(knex: Knex) {
   return knex.schema
     .createTable(ETableNames.usuarios, (table) => {
       table.increments('id').primary().notNullable();
-      table.string('nome', 255).notNullable();
+      table.string('nome', 120).notNullable();
       table.string('email', 255).unique().notNullable();
+      table.string('senha', 255).notNullable();
       table.boolean('ativo').defaultTo(true);
 
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());

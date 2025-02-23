@@ -22,7 +22,7 @@ const garantirAutenticado: RequestHandler = async (req, res, next) => {
       });
     }
 
-    const jwtData = Servicos.JWTServico.verificar(token);
+    const jwtData = Servicos.JWT.verificar(token);
     if (jwtData === 'JWT_SECRET_NOT_FOUND') {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         errors: { default: 'Erro ao verificar o token' },
