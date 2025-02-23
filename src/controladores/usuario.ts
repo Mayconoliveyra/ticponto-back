@@ -56,7 +56,7 @@ const login = async (req: Request, res: Response) => {
     }
 
     const token = Servicos.JWT.entrar({ id: usuario.id, name: usuario.nome, email: usuario.email });
-    return res.status(StatusCodes.OK).json({ token });
+    return res.status(StatusCodes.OK).json(token);
   } catch (error) {
     Util.log.error('Erro ao realizar login', error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
