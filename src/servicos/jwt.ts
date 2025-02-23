@@ -5,6 +5,7 @@ import { Util } from '../util';
 interface IJwtData {
   id: number;
   name: string;
+  email: string;
 }
 
 const entrar = (data: IJwtData): { token: string; exp: number } | 'JWT_SECRET_NOT_FOUND' => {
