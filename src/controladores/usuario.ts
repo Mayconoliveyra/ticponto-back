@@ -42,6 +42,12 @@ const login = async (req: Request, res: Response) => {
       });
     }
 
+    if (!usuario.ativo) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        errors: { default: 'Conta desativada. Entre em contato com o administrador.' },
+      });
+    }
+
     const senhaValida = await Servicos.Bcrypt.verificarSenha(senha, usuario.senha);
     if (!senhaValida) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
