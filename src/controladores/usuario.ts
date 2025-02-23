@@ -12,7 +12,6 @@ import { Util } from '../util';
 // Definição do tipo para validação do corpo da requisição
 type IBodyProps = Omit<IUsuario, 'id' | 'ativo' | 'created_at' | 'updated_at' | 'deleted_at'>;
 
-// Middleware de validação para o cadastro de usuário
 const cadastrarValidacao = Middlewares.validacao((getSchema) => ({
   body: getSchema<IBodyProps>(
     yup.object().shape({
@@ -23,7 +22,6 @@ const cadastrarValidacao = Middlewares.validacao((getSchema) => ({
   ),
 }));
 
-// Middleware de validação para login
 const loginValidacao = Middlewares.validacao((getSchema) => ({
   body: getSchema<{ email: string; senha: string }>(
     yup.object().shape({
@@ -33,7 +31,6 @@ const loginValidacao = Middlewares.validacao((getSchema) => ({
   ),
 }));
 
-// Controlador para login de usuário
 const login = async (req: Request, res: Response) => {
   const { email, senha } = req.body;
 
@@ -100,17 +97,4 @@ const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
   }
 };
 
-// Controlador para listar todos os usuários
-const listarTodos = async (req: Request, res: Response) => {
-  try {
-    const usuarios = await Repositorios.Usuario.listarTodos();
-    return res.status(StatusCodes.OK).json(usuarios);
-  } catch (error) {
-    Util.log.error('Erro ao listar usuários', error);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: { default: 'Erro ao listar usuários' },
-    });
-  }
-};
-
-export const Usuario = { cadastrarValidacao, cadastrar, listarTodos, loginValidacao, login };
+export const Usuario = { cadastrarValidacao, cadastrar, loginValidacao, login };

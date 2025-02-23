@@ -26,13 +26,4 @@ const buscarPorEmail = async (email: string): Promise<IUsuario | null> => {
   }
 };
 
-const listarTodos = async () => {
-  try {
-    return await Knex('usuarios').select('*');
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
-
-export const Usuario = { cadastrar, listarTodos, buscarPorEmail };
+export const Usuario = { cadastrar, buscarPorEmail };
