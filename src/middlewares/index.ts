@@ -1,5 +1,5 @@
-import * as garantirAutenticado from './garantirAutenticado';
+import * as autenticado from './autenticado';
 import * as JSONParseError from './JSONParseError';
 import * as validacao from './validacao';
 
-export const Middlewares = { ...JSONParseError, ...garantirAutenticado, ...validacao };
+export const Middlewares = { ...JSONParseError, ...autenticado, ...validacao };

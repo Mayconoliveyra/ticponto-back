@@ -4,31 +4,31 @@ import * as yup from 'yup';
 
 import { Middlewares } from '../middlewares';
 
-import { IPonto } from '../banco/models/ponto';
 import { Repositorios } from '../repositorios';
 import { Util } from '../util';
 
-type IBodyProps = Omit<IPonto, 'id' | 'created_at' | 'updated_at' | 'horario' | 'deleted_at'>;
-
 const registrarValidacao = Middlewares.validacao((getSchema) => ({
-  body: getSchema<IBodyProps>(
+  params: getSchema<{ id: string }>(
     yup.object().shape({
-      usuario_id: yup.number().required(),
-      tipo: yup.string().oneOf(['ENTRADA', 'SAIDA']).required(),
+      id: yup.string().required().trim(),
     }),
   ),
 }));
 
-const registrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
+const registrar = async (req: Request<{ id: string }>, res: Response) => {
   try {
-    const { usuario_id, tipo } = req.body;
+    const id = req.usuario?.id as number;
 
-    const modelo = {
-      usuario_id,
-      tipo,
-    };
+    // Buscar o último registro do usuário
+    const ultimoRegistro = await Repositorios.Ponto.buscarUltimoRegistro(id);
 
-    const result = await Repositorios.Ponto.registrar(modelo);
+    // Definir tipo com base no último registro
+    const tipo = ultimoRegistro?.tipo === 'ENTRADA' ? 'SAIDA' : 'ENTRADA';
+
+    const result = await Repositorios.Ponto.registrar({
+      usuario_id: id,
+      tipo: tipo,
+    });
 
     if (result) {
       return res.status(StatusCodes.CREATED).send();

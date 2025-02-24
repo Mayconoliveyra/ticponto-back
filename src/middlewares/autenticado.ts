@@ -1,10 +1,11 @@
 import { RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
+import { Repositorios } from '../repositorios';
 import { Servicos } from '../servicos';
 import { Util } from '../util';
 
-const garantirAutenticado: RequestHandler = async (req, res, next) => {
+const autenticado: RequestHandler = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
 
@@ -33,10 +34,26 @@ const garantirAutenticado: RequestHandler = async (req, res, next) => {
       });
     }
 
+    const usuario = await Repositorios.Usuario.buscarPorEmail(jwtData.email);
+    if (!usuario) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        errors: { default: 'Usuário não encontrado' },
+      });
+    }
+
+    if (!usuario.ativo) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        errors: { default: 'Usuário inativo' },
+      });
+    }
+
+    const { senha, ...usuarioSemSenha } = usuario;
+    (req as unknown as any).usuario = usuarioSemSenha;
+
     return next();
   } catch (error) {
-    Util.log.error('Falha ao executar: garantirAutenticado', error);
+    Util.log.error('Falha ao executar: autenticado', error);
   }
 };
 
-export { garantirAutenticado };
+export { autenticado };

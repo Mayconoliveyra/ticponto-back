@@ -16,4 +16,13 @@ const registrar = async (ponto: Omit<IPonto, 'id' | 'created_at' | 'updated_at' 
   }
 };
 
-export const Ponto = { registrar };
+const buscarUltimoRegistro = async (usuario_id: number) => {
+  try {
+    return await Knex.table(ETableNames.pontos).where({ usuario_id }).orderBy('created_at', 'desc').first();
+  } catch (error) {
+    Util.log.error('Falha ao buscar último registro de ponto', error);
+    return null;
+  }
+};
+
+export const Ponto = { registrar, buscarUltimoRegistro };
