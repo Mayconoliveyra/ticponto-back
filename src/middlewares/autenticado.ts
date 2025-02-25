@@ -1,8 +1,12 @@
 import { RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
+import { IUsuario } from '../banco/models/usuario';
+
 import { Repositorios } from '../repositorios';
+
 import { Servicos } from '../servicos';
+
 import { Util } from '../util';
 
 const autenticado: RequestHandler = async (req, res, next) => {
@@ -47,8 +51,9 @@ const autenticado: RequestHandler = async (req, res, next) => {
       });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { senha, ...usuarioSemSenha } = usuario;
-    (req as unknown as any).usuario = usuarioSemSenha;
+    (req as any).usuario = usuarioSemSenha as IUsuario;
 
     return next();
   } catch (error) {

@@ -1,6 +1,7 @@
 import { Knex } from 'knex';
 
 import { Util } from '../../util';
+
 import { ETableNames } from '../eTableNames';
 
 export async function up(knex: Knex) {

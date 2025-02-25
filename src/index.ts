@@ -1,4 +1,5 @@
 import { Knex } from './banco/knex';
+
 import { Configs } from './configs';
 
 const { NODE_ENV } = process.env;

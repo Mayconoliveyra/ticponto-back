@@ -3,6 +3,7 @@ import moment from 'moment';
 import { ETableNames } from '../banco/eTableNames';
 import { Knex } from '../banco/knex';
 import { IPonto } from '../banco/models/ponto';
+
 import { Util } from '../util';
 
 const registrar = async (ponto: Omit<IPonto, 'id' | 'created_at' | 'updated_at' | 'horario' | 'deleted_at'>) => {

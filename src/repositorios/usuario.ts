@@ -1,6 +1,7 @@
 import { ETableNames } from '../banco/eTableNames';
 import { Knex } from '../banco/knex';
 import { IUsuario } from '../banco/models/usuario';
+
 import { Util } from '../util';
 
 const cadastrar = async (usuario: Omit<IUsuario, 'id' | 'ativo' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<boolean> => {

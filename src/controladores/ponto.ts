@@ -2,9 +2,12 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
+import { IUsuario } from '../banco/models/usuario';
+
 import { Middlewares } from '../middlewares';
 
 import { Repositorios } from '../repositorios';
+
 import { Util } from '../util';
 
 const registrarValidacao = Middlewares.validacao((getSchema) => ({
@@ -15,18 +18,18 @@ const registrarValidacao = Middlewares.validacao((getSchema) => ({
   ),
 }));
 
-const registrar = async (req: Request<{ id: string }>, res: Response) => {
+const registrar = async (req: Request, res: Response) => {
   try {
-    const id = req.usuario?.id as number;
+    const usuario = (req as any).usuario as IUsuario;
 
     // Buscar o último registro do usuário
-    const ultimoRegistro = await Repositorios.Ponto.buscarUltimoRegistro(id);
+    const ultimoRegistro = await Repositorios.Ponto.buscarUltimoRegistro(usuario.id);
 
     // Definir tipo com base no último registro
     const tipo = ultimoRegistro?.tipo === 'ENTRADA' ? 'SAIDA' : 'ENTRADA';
 
     const result = await Repositorios.Ponto.registrar({
-      usuario_id: id,
+      usuario_id: usuario.id,
       tipo: tipo,
     });
 

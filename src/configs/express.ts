@@ -7,6 +7,7 @@ import https from 'https';
 import { JSONParseError } from '../middlewares/JSONParseError';
 
 import { router } from '../rotas';
+
 import { CorsConfig } from './cors';
 import { HttpsConfig } from './https';
 import { MorganConfig } from './morgan';

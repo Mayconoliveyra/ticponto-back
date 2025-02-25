@@ -2,11 +2,14 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
+import { IUsuario } from '../banco/models/usuario';
+
 import { Middlewares } from '../middlewares';
 
-import { IUsuario } from '../banco/models/usuario';
 import { Repositorios } from '../repositorios';
+
 import { Servicos } from '../servicos';
+
 import { Util } from '../util';
 
 // Definição do tipo para validação do corpo da requisição

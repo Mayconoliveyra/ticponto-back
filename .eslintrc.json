@@ -21,12 +21,13 @@
       "warn",
       {
         "newlinesBetween": "always",
-        "groups": [["module"], ["/configuracoes/"], ["/controladores/"], ["/database/"], ["/middlewares/"], ["/repositories/"], ["/routes/"], ["/services/"], ["/utils/"]],
+        "groups": [["module"], ["/banco/"], ["/configs/"], ["/controladores/"], ["/middlewares/"], ["/repositorios/"], ["/rotas/"], ["/servicos/"], ["/util/"]],
         "alphabetize": { "order": "asc", "ignoreCase": true }
       }
     ],
     "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/ban-types": "off"
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "ignorePatterns": ["/build"]
 }
