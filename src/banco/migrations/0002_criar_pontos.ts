@@ -9,8 +9,17 @@ export async function up(knex: Knex) {
     .createTable(ETableNames.pontos, (table) => {
       table.increments('id').primary().notNullable();
       table.integer('usuario_id').notNullable().unsigned().references('id').inTable(ETableNames.usuarios);
-      table.enu('tipo', ['ENTRADA', 'SAIDA']).notNullable();
-      table.datetime('horario').notNullable();
+      table.date('data').notNullable();
+
+      // Turnos normais
+      table.time('entrada_1').notNullable();
+      table.time('saida_1').nullable();
+      table.time('entrada_2').nullable();
+      table.time('saida_2').nullable();
+
+      // Horas Extras
+      table.time('extra_entrada').nullable();
+      table.time('extra_saida').nullable();
 
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
       table.timestamp('updated_at').defaultTo(knex.raw('NULL ON UPDATE CURRENT_TIMESTAMP'));
