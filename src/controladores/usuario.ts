@@ -19,8 +19,127 @@ const cadastrarValidacao = Middlewares.validacao((getSchema) => ({
   body: getSchema<IBodyProps>(
     yup.object().shape({
       nome: yup.string().required().max(120).trim(),
-      email: yup.string().email().required().max(255).trim(),
+      email: yup.string().email().required().max(120).trim(),
       senha: yup.string().required().max(255).trim(),
+      contato: yup.string().optional().max(13).trim(),
+      nascimento: yup.string().optional(),
+      notificar: yup.boolean().required(),
+      administrador: yup.boolean().required(),
+      empresa_id: yup.number().required(),
+
+      // Validação de horários esperados no formato TIME (HH:MM:SS)
+      segunda_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      segunda_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      segunda_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      segunda_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      terca_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      terca_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      terca_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      terca_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quarta_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quarta_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quarta_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quarta_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quinta_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quinta_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quinta_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      quinta_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sexta_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sexta_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sexta_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sexta_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sabado_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sabado_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sabado_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      sabado_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      domingo_inicio_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      domingo_saida_1: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      domingo_inicio_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
+      domingo_saida_2: yup
+        .string()
+        .optional()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
     }),
   ),
 }));
@@ -36,7 +155,44 @@ const loginValidacao = Middlewares.validacao((getSchema) => ({
 
 // Controlador para cadastro de usuário
 const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
-  const { nome, email, senha } = req.body;
+  const {
+    nome,
+    email,
+    senha,
+    contato,
+    notificar,
+    nascimento,
+    administrador,
+    empresa_id,
+    segunda_inicio_1,
+    segunda_saida_1,
+    segunda_inicio_2,
+    segunda_saida_2,
+    terca_inicio_1,
+    terca_saida_1,
+    terca_inicio_2,
+    terca_saida_2,
+    quarta_inicio_1,
+    quarta_saida_1,
+    quarta_inicio_2,
+    quarta_saida_2,
+    quinta_inicio_1,
+    quinta_saida_1,
+    quinta_inicio_2,
+    quinta_saida_2,
+    sexta_inicio_1,
+    sexta_saida_1,
+    sexta_inicio_2,
+    sexta_saida_2,
+    sabado_inicio_1,
+    sabado_saida_1,
+    sabado_inicio_2,
+    sabado_saida_2,
+    domingo_inicio_1,
+    domingo_saida_1,
+    domingo_inicio_2,
+    domingo_saida_2,
+  } = req.body;
 
   try {
     // Verificar se o email já está cadastrado
@@ -54,7 +210,44 @@ const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
       });
     }
 
-    const modelo = { nome, email, senha: senhaHasheada };
+    const modelo: IBodyProps = {
+      nome,
+      email,
+      senha: senhaHasheada,
+      contato,
+      notificar,
+      empresa_id,
+      nascimento,
+      administrador,
+      segunda_inicio_1,
+      segunda_saida_1,
+      segunda_inicio_2,
+      segunda_saida_2,
+      terca_inicio_1,
+      terca_saida_1,
+      terca_inicio_2,
+      terca_saida_2,
+      quarta_inicio_1,
+      quarta_saida_1,
+      quarta_inicio_2,
+      quarta_saida_2,
+      quinta_inicio_1,
+      quinta_saida_1,
+      quinta_inicio_2,
+      quinta_saida_2,
+      sexta_inicio_1,
+      sexta_saida_1,
+      sexta_inicio_2,
+      sexta_saida_2,
+      sabado_inicio_1,
+      sabado_saida_1,
+      sabado_inicio_2,
+      sabado_saida_2,
+      domingo_inicio_1,
+      domingo_saida_1,
+      domingo_inicio_2,
+      domingo_saida_2,
+    };
     const result = await Repositorios.Usuario.cadastrar(modelo);
 
     if (result) {

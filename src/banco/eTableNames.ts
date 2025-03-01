@@ -1,4 +1,5 @@
 export enum ETableNames {
+  empresas = 'empresas',
   usuarios = 'usuarios',
   pontos = 'pontos',
   feriados = 'feriados',
