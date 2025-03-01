@@ -12,6 +12,14 @@ import { Repositorios } from '../repositorios';
 
 import { Util } from '../util';
 
+interface IGetPontosQuery {
+  usuario_id?: number;
+  data_inicio?: string;
+  data_fim?: string;
+  paginacao?: number;
+  limite?: number;
+}
+
 // Validação do ID do usuário na requisição
 const registrarValidacao = Middlewares.validacao((getSchema) => ({
   params: getSchema<{ id: string }>(
@@ -82,4 +90,45 @@ const registrar = async (req: Request, res: Response) => {
   }
 };
 
-export const Ponto = { registrarValidacao, registrar };
+// Definição do esquema de validação dos filtros
+const consultarValidacao = Middlewares.validacao((getSchema) => ({
+  query: getSchema<IGetPontosQuery>(
+    yup.object().shape({
+      usuario_id: yup.number().integer().optional(),
+      data_inicio: yup
+        .string()
+        .optional()
+        .matches(/^\d{4}-\d{2}-\d{2}$/),
+      data_fim: yup
+        .string()
+        .optional()
+        .matches(/^\d{4}-\d{2}-\d{2}$/),
+      paginacao: yup.number().integer().optional().default(1),
+      limite: yup.number().integer().optional().default(10),
+    }),
+  ),
+}));
+
+const consultarPontos = async (req: Request, res: Response) => {
+  try {
+    const { usuario_id, data_inicio, data_fim, paginacao, limite } = req.query;
+
+    const filtros = {
+      usuario_id: usuario_id ? Number(usuario_id) : undefined,
+      data_inicio: data_inicio as string,
+      data_fim: data_fim as string,
+      paginacao: paginacao ? Number(paginacao) : 1, // Se undefined, usa 1 como padrão
+      limite: limite ? Number(limite) : 10, // Se undefined, usa 10 como padrão
+    };
+
+    const pontos = await Repositorios.Ponto.buscarPontos(filtros);
+
+    return res.status(StatusCodes.OK).json(pontos);
+  } catch (error) {
+    Util.log.error('Erro ao buscar pontos', error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors: { default: 'Erro ao buscar pontos.' },
+    });
+  }
+};
+export const Ponto = { registrarValidacao, registrar, consultarValidacao, consultarPontos };

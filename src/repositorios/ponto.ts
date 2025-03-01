@@ -1,8 +1,17 @@
 import { ETableNames } from '../banco/eTableNames';
 import { Knex } from '../banco/knex';
 import { IPonto } from '../banco/models/ponto';
+import { IVwPonto } from '../banco/models/vwPonto';
 
 import { Util } from '../util';
+
+interface IFiltros {
+  usuario_id?: number;
+  data_inicio?: string;
+  data_fim?: string;
+  paginacao: number;
+  limite: number;
+}
 
 // Registrar novo ponto
 const registrar = async (ponto: Omit<IPonto, 'created_at' | 'id'>): Promise<boolean> => {
@@ -36,4 +45,29 @@ const atualizarRegistro = async (ponto: Omit<IPonto, 'created_at' | 'id'>): Prom
   }
 };
 
-export const Ponto = { registrar, buscarRegistroPorData, atualizarRegistro };
+const buscarPontos = async (filtros: IFiltros): Promise<IVwPonto[]> => {
+  try {
+    let query = Knex.table(ETableNames.vw_pontos).select('*');
+
+    if (filtros.usuario_id) {
+      query = query.where('usuario_id', filtros.usuario_id);
+    }
+
+    if (filtros.data_inicio) {
+      query = query.where('data', '>=', filtros.data_inicio);
+    }
+
+    if (filtros.data_fim) {
+      query = query.where('data', '<=', filtros.data_fim);
+    }
+
+    query = query.offset((filtros.paginacao - 1) * filtros.limite).limit(filtros.limite);
+
+    return await query;
+  } catch (error) {
+    Util.log.error('Erro ao buscar pontos', error);
+    return [];
+  }
+};
+
+export const Ponto = { registrar, buscarRegistroPorData, atualizarRegistro, buscarPontos };
