@@ -181,7 +181,7 @@ const loginValidacao = Middlewares.validacao((getSchema) => ({
   ),
 }));
 
-// Controlador para cadastro de usuário
+// ---------------------------------------------------------------------------------
 const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
   const {
     nome,
@@ -276,9 +276,12 @@ const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
       domingo_inicio_2,
       domingo_saida_2,
     };
-    const result = await Repositorios.Usuario.cadastrar(modelo);
+    const usuarioId = await Repositorios.Usuario.cadastrar(modelo);
 
-    if (result) {
+    if (usuarioId) {
+      // Gera os pontos dos próximos 90 dias
+      await Servicos.Ponto.gerarRegistrosPonto(usuarioId);
+
       return res.status(StatusCodes.NO_CONTENT).send();
     } else {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

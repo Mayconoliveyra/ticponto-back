@@ -4,15 +4,16 @@ import { IUsuario } from '../banco/models/usuario';
 
 import { Util } from '../util';
 
-const cadastrar = async (usuario: Omit<IUsuario, 'id' | 'ativo' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<boolean> => {
+const cadastrar = async (usuario: Omit<IUsuario, 'id' | 'ativo' | 'created_at' | 'updated_at' | 'deleted_at'>): Promise<number | null> => {
   try {
-    await Knex.table(ETableNames.usuarios).insert(usuario);
+    const result = await Knex.table(ETableNames.usuarios).insert(usuario);
 
-    return true;
+    // Retorna o ID do usuário recém-criado
+    return result[0] || null;
   } catch (error) {
     Util.log.error('Falha ao cadastrar usuário', error);
 
-    return false;
+    return null;
   }
 };
 

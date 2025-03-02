@@ -18,7 +18,7 @@ export async function up(knex: Knex) {
       table.time('esperado_saida_2').nullable();
 
       // Turnos normais
-      table.time('entrada_1').notNullable();
+      table.time('entrada_1').nullable();
       table.time('saida_1').nullable();
       table.time('entrada_2').nullable();
       table.time('saida_2').nullable();

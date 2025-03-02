@@ -12,8 +12,8 @@ export interface IPonto {
   esperado_inicio_2?: string | null;
   esperado_saida_2?: string | null;
 
-  extra_entrada?: string;
-  extra_saida?: string;
+  extra_entrada?: string | null;
+  extra_saida?: string | null;
 
   created_at: string;
   updated_at?: string;

@@ -16,7 +16,7 @@ interface IFiltros {
 }
 
 // Definição da interface de retorno com os tipos corretos
-interface IHorariosEsperados {
+export interface IHorariosEsperados {
   esperado_inicio_1: string | null;
   esperado_saida_1: string | null;
   esperado_inicio_2: string | null;
@@ -116,4 +116,21 @@ const obterHorariosEsperados = async (usuario_id: number, data: string): Promise
   };
 };
 
-export const Ponto = { registrar, buscarRegistroPorData, atualizarRegistro, buscarPontos, obterHorariosEsperados };
+const excluirRegistrosFuturosSemPonto = async (usuarioId: number, dataAtual: string) => {
+  try {
+    await Knex(ETableNames.pontos)
+      .where('usuario_id', usuarioId)
+      .andWhere('data', '>=', dataAtual) // Apenas registros futuros
+      .whereNull('entrada_1')
+      .whereNull('saida_1')
+      .whereNull('entrada_2')
+      .whereNull('saida_2')
+      .whereNull('extra_entrada')
+      .whereNull('extra_saida') // Exclui apenas registros sem marcações
+      .delete();
+  } catch (error) {
+    Util.log.error('Erro ao excluir registros futuros sem ponto', error);
+  }
+};
+
+export const Ponto = { registrar, buscarRegistroPorData, atualizarRegistro, buscarPontos, obterHorariosEsperados, excluirRegistrosFuturosSemPonto };

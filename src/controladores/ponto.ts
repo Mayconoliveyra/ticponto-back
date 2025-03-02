@@ -9,6 +9,7 @@ import { IUsuario } from '../banco/models/usuario';
 import { Middlewares } from '../middlewares';
 
 import { Repositorios } from '../repositorios';
+import { IHorariosEsperados } from '../repositorios/ponto';
 
 import { Util } from '../util';
 
@@ -31,15 +32,19 @@ const registrarValidacao = Middlewares.validacao((getSchema) => ({
 
 const registrar = async (req: Request, res: Response) => {
   try {
+    let horariosEsperados: IHorariosEsperados | null = null;
+
     const usuario = (req as any).usuario as IUsuario;
     const dataAtual = moment().format('YYYY-MM-DD');
     const horaAtual = moment().format('HH:mm:00');
 
-    // Buscar horários esperados para o usuário
-    const horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuario.id, dataAtual);
-
-    // Buscar registro do dia
+    // Buscar o registro do dia, assim sabe se vai ser o primeiro ou não
     const ultimoRegistro: IPonto | null = await Repositorios.Ponto.buscarRegistroPorData(usuario.id, dataAtual);
+
+    if (!ultimoRegistro) {
+      // Só busca os horários esperados se for o PRIMEIRO registro do dia
+      horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuario.id, dataAtual);
+    }
 
     let atualizar = false;
     let novoRegistro: Omit<IPonto, 'created_at' | 'id'> = {
@@ -52,6 +57,7 @@ const registrar = async (req: Request, res: Response) => {
       extra_entrada: undefined,
       extra_saida: undefined,
 
+      // Só vai ser setado se for o primeiro registro do dia.
       esperado_inicio_1: horariosEsperados?.esperado_inicio_1 || null,
       esperado_saida_1: horariosEsperados?.esperado_saida_1 || null,
       esperado_inicio_2: horariosEsperados?.esperado_inicio_2 || null,
@@ -59,6 +65,7 @@ const registrar = async (req: Request, res: Response) => {
     };
 
     if (!ultimoRegistro) {
+      // Se não há registro hoje, criar um novo e marcar entrada_1
       novoRegistro.entrada_1 = horaAtual;
     } else {
       atualizar = true;
@@ -143,4 +150,5 @@ const consultarPontos = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const Ponto = { registrarValidacao, registrar, consultarValidacao, consultarPontos };
