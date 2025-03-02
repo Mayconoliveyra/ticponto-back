@@ -1,7 +1,8 @@
 import moment from 'moment';
 
 import { Repositorios } from '../repositorios';
-import { IHorariosEsperados } from '../repositorios/ponto';
+
+import { Util } from '../util';
 
 const gerarRegistrosPonto = async (usuarioId: number) => {
   const hoje = moment().format('YYYY-MM-DD');
@@ -9,16 +10,21 @@ const gerarRegistrosPonto = async (usuarioId: number) => {
 
   for (let i = 0; i < diasParaGerar; i++) {
     const dataAtual = moment(hoje).add(i, 'days').format('YYYY-MM-DD');
-    const diaSemana = moment(dataAtual).locale('pt-br').format('dddd').toLowerCase(); // Exemplo: segunda, terça
 
     // Buscar horários esperados do funcionário para o dia
     const horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuarioId, dataAtual);
 
+    if (!horariosEsperados) {
+      Util.log.error(`Nenhum horário esperado encontrado para ${usuarioId} em ${dataAtual}`);
+
+      continue;
+    }
+
     // Definir os horários esperados de forma segura
-    const esperado_inicio_1 = horariosEsperados[`${diaSemana}_inicio_1` as keyof IHorariosEsperados] || null;
-    const esperado_saida_1 = horariosEsperados[`${diaSemana}_saida_1` as keyof IHorariosEsperados] || null;
-    const esperado_inicio_2 = horariosEsperados[`${diaSemana}_inicio_2` as keyof IHorariosEsperados] || null;
-    const esperado_saida_2 = horariosEsperados[`${diaSemana}_saida_2` as keyof IHorariosEsperados] || null;
+    const esperado_inicio_1 = horariosEsperados.esperado_inicio_1;
+    const esperado_saida_1 = horariosEsperados.esperado_saida_1;
+    const esperado_inicio_2 = horariosEsperados.esperado_inicio_2;
+    const esperado_saida_2 = horariosEsperados.esperado_saida_2;
 
     // Verificar se já existe um registro de ponto para o dia
     const existeRegistro = await Repositorios.Ponto.buscarRegistroPorData(usuarioId, dataAtual);

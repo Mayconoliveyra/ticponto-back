@@ -9,7 +9,6 @@ import { IUsuario } from '../banco/models/usuario';
 import { Middlewares } from '../middlewares';
 
 import { Repositorios } from '../repositorios';
-import { IHorariosEsperados } from '../repositorios/ponto';
 
 import { Util } from '../util';
 
@@ -32,73 +31,52 @@ const registrarValidacao = Middlewares.validacao((getSchema) => ({
 
 const registrar = async (req: Request, res: Response) => {
   try {
-    let horariosEsperados: IHorariosEsperados | null = null;
-
     const usuario = (req as any).usuario as IUsuario;
     const dataAtual = moment().format('YYYY-MM-DD');
     const horaAtual = moment().format('HH:mm:00');
 
-    // Buscar o registro do dia, assim sabe se vai ser o primeiro ou não
-    const ultimoRegistro: IPonto | null = await Repositorios.Ponto.buscarRegistroPorData(usuario.id, dataAtual);
+    // Buscar o registro do dia (agora já existe sempre)
+    const registroAtual: IPonto | null = await Repositorios.Ponto.buscarRegistroPorData(usuario.id, dataAtual);
 
-    if (!ultimoRegistro) {
-      // Só busca os horários esperados se for o PRIMEIRO registro do dia
-      horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuario.id, dataAtual);
+    if (!registroAtual) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        erro: 'Registro de ponto para hoje não encontrado',
+      });
     }
 
-    let atualizar = false;
-    let novoRegistro: Omit<IPonto, 'created_at' | 'id'> = {
+    // Determinar qual campo de horário será preenchido
+    const camposAtualizados: Partial<IPonto> = {};
+
+    if (!registroAtual.entrada_1) {
+      camposAtualizados.entrada_1 = horaAtual;
+    } else if (!registroAtual.saida_1) {
+      camposAtualizados.saida_1 = horaAtual;
+    } else if (!registroAtual.entrada_2) {
+      camposAtualizados.entrada_2 = horaAtual;
+    } else if (!registroAtual.saida_2) {
+      camposAtualizados.saida_2 = horaAtual;
+    } else if (!registroAtual.extra_entrada) {
+      camposAtualizados.extra_entrada = horaAtual;
+    } else if (!registroAtual.extra_saida) {
+      camposAtualizados.extra_saida = horaAtual;
+    } else {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        erro: 'Já foram registradas todas as marcações para hoje',
+      });
+    }
+
+    // Atualizar o registro no banco de dados
+    const result = await Repositorios.Ponto.atualizarRegistro({
       usuario_id: usuario.id,
       data: dataAtual,
-      entrada_1: undefined,
-      saida_1: undefined,
-      entrada_2: undefined,
-      saida_2: undefined,
-      extra_entrada: undefined,
-      extra_saida: undefined,
-
-      // Só vai ser setado se for o primeiro registro do dia.
-      esperado_inicio_1: horariosEsperados?.esperado_inicio_1 || null,
-      esperado_saida_1: horariosEsperados?.esperado_saida_1 || null,
-      esperado_inicio_2: horariosEsperados?.esperado_inicio_2 || null,
-      esperado_saida_2: horariosEsperados?.esperado_saida_2 || null,
-    };
-
-    if (!ultimoRegistro) {
-      // Se não há registro hoje, criar um novo e marcar entrada_1
-      novoRegistro.entrada_1 = horaAtual;
-    } else {
-      atualizar = true;
-
-      if (!ultimoRegistro.saida_1) {
-        novoRegistro = { ...ultimoRegistro, saida_1: horaAtual };
-      } else if (!ultimoRegistro.entrada_2) {
-        novoRegistro = { ...ultimoRegistro, entrada_2: horaAtual };
-      } else if (!ultimoRegistro.saida_2) {
-        novoRegistro = { ...ultimoRegistro, saida_2: horaAtual };
-      } else if (!ultimoRegistro.extra_entrada) {
-        novoRegistro = { ...ultimoRegistro, extra_entrada: horaAtual };
-      } else if (!ultimoRegistro.extra_saida) {
-        novoRegistro = { ...ultimoRegistro, extra_saida: horaAtual };
-      } else {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          erro: 'Já foram registradas todas as marcações para hoje',
-        });
-      }
-    }
-
-    let result;
-    if (atualizar) {
-      result = await Repositorios.Ponto.atualizarRegistro(novoRegistro);
-    } else {
-      result = await Repositorios.Ponto.registrar(novoRegistro);
-    }
+      ...camposAtualizados, // Atualiza somente o campo necessário
+    });
 
     if (result) {
-      return res.status(StatusCodes.CREATED).send();
+      return res.status(StatusCodes.NO_CONTENT).send(); // Retorna 204 se tudo deu certo
     } else {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        erro: 'Erro ao registrar ponto',
+        erro: 'Erro ao atualizar ponto',
       });
     }
   } catch (error) {
