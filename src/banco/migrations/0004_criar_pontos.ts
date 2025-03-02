@@ -11,6 +11,12 @@ export async function up(knex: Knex) {
       table.integer('usuario_id').notNullable().unsigned().references('id').inTable(ETableNames.usuarios);
       table.date('data').notNullable();
 
+      // Turno esperado
+      table.time('esperado_inicio_1').nullable();
+      table.time('esperado_saida_1').nullable();
+      table.time('esperado_inicio_2').nullable();
+      table.time('esperado_saida_2').nullable();
+
       // Turnos normais
       table.time('entrada_1').notNullable();
       table.time('saida_1').nullable();

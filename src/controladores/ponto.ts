@@ -35,6 +35,9 @@ const registrar = async (req: Request, res: Response) => {
     const dataAtual = moment().format('YYYY-MM-DD');
     const horaAtual = moment().format('HH:mm:00');
 
+    // Buscar horários esperados para o usuário
+    const horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuario.id, dataAtual);
+
     // Buscar registro do dia
     const ultimoRegistro: IPonto | null = await Repositorios.Ponto.buscarRegistroPorData(usuario.id, dataAtual);
 
@@ -48,13 +51,16 @@ const registrar = async (req: Request, res: Response) => {
       saida_2: undefined,
       extra_entrada: undefined,
       extra_saida: undefined,
+
+      esperado_inicio_1: horariosEsperados?.esperado_inicio_1 || null,
+      esperado_saida_1: horariosEsperados?.esperado_saida_1 || null,
+      esperado_inicio_2: horariosEsperados?.esperado_inicio_2 || null,
+      esperado_saida_2: horariosEsperados?.esperado_saida_2 || null,
     };
 
     if (!ultimoRegistro) {
-      // Se não há registro para o dia, criar um novo com a primeira entrada
       novoRegistro.entrada_1 = horaAtual;
     } else {
-      // Se já existe registro para hoje, definir a próxima marcação
       atualizar = true;
 
       if (!ultimoRegistro.saida_1) {
@@ -68,7 +74,9 @@ const registrar = async (req: Request, res: Response) => {
       } else if (!ultimoRegistro.extra_saida) {
         novoRegistro = { ...ultimoRegistro, extra_saida: horaAtual };
       } else {
-        return res.status(StatusCodes.BAD_REQUEST).json({ erro: 'Já foram registradas todas as marcações para hoje' });
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          erro: 'Já foram registradas todas as marcações para hoje',
+        });
       }
     }
 
@@ -82,11 +90,15 @@ const registrar = async (req: Request, res: Response) => {
     if (result) {
       return res.status(StatusCodes.CREATED).send();
     } else {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ erro: 'Erro ao registrar ponto' });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        erro: 'Erro ao registrar ponto',
+      });
     }
   } catch (error) {
     Util.log.error('Erro ao registrar ponto', error);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ erro: 'Erro interno ao registrar ponto' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      erro: 'Erro interno ao registrar ponto',
+    });
   }
 };
 

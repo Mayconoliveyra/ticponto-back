@@ -2,10 +2,16 @@ export interface IPonto {
   id: number;
   usuario_id: number;
   data: string; // YYYY-MM-DD
-  entrada_1?: string; // HH:MM:SS
-  saida_1?: string;
-  entrada_2?: string;
-  saida_2?: string;
+  entrada_1?: string | null; // HH:MM:00
+  saida_1?: string | null;
+  entrada_2?: string | null;
+  saida_2?: string | null;
+
+  esperado_inicio_1?: string | null; // HH:MM:00
+  esperado_saida_1?: string | null;
+  esperado_inicio_2?: string | null;
+  esperado_saida_2?: string | null;
+
   extra_entrada?: string;
   extra_saida?: string;
 

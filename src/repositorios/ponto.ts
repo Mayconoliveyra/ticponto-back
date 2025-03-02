@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { ETableNames } from '../banco/eTableNames';
 import { Knex } from '../banco/knex';
 import { IPonto } from '../banco/models/ponto';
@@ -11,6 +13,14 @@ interface IFiltros {
   data_fim?: string;
   paginacao: number;
   limite: number;
+}
+
+// Definição da interface de retorno com os tipos corretos
+interface IHorariosEsperados {
+  esperado_inicio_1: string | null;
+  esperado_saida_1: string | null;
+  esperado_inicio_2: string | null;
+  esperado_saida_2: string | null;
 }
 
 // Registrar novo ponto
@@ -70,4 +80,40 @@ const buscarPontos = async (filtros: IFiltros): Promise<IVwPonto[]> => {
   }
 };
 
-export const Ponto = { registrar, buscarRegistroPorData, atualizarRegistro, buscarPontos };
+const obterHorariosEsperados = async (usuario_id: number, data: string): Promise<IHorariosEsperados> => {
+  const diasSemana = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+  const diaSemana = diasSemana[moment(data, 'YYYY-MM-DD').day()];
+
+  // Mapeamos as colunas corretamente
+  const colunas = {
+    esperado_inicio_1: `${diaSemana}_inicio_1`,
+    esperado_saida_1: `${diaSemana}_saida_1`,
+    esperado_inicio_2: `${diaSemana}_inicio_2`,
+    esperado_saida_2: `${diaSemana}_saida_2`,
+  };
+
+  // Buscamos os horários esperados do usuário
+  const resultado = (await Knex(ETableNames.usuarios)
+    .select([colunas.esperado_inicio_1, colunas.esperado_saida_1, colunas.esperado_inicio_2, colunas.esperado_saida_2])
+    .where('id', usuario_id)
+    .first()) as Record<string, string | null> | undefined;
+
+  if (!resultado) {
+    return {
+      esperado_inicio_1: null,
+      esperado_saida_1: null,
+      esperado_inicio_2: null,
+      esperado_saida_2: null,
+    };
+  }
+
+  // Retorna os horários esperados corretamente
+  return {
+    esperado_inicio_1: resultado[colunas.esperado_inicio_1] || null,
+    esperado_saida_1: resultado[colunas.esperado_saida_1] || null,
+    esperado_inicio_2: resultado[colunas.esperado_inicio_2] || null,
+    esperado_saida_2: resultado[colunas.esperado_saida_2] || null,
+  };
+};
+
+export const Ponto = { registrar, buscarRegistroPorData, atualizarRegistro, buscarPontos, obterHorariosEsperados };

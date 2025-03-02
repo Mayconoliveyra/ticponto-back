@@ -21,8 +21,8 @@ const cadastrarValidacao = Middlewares.validacao((getSchema) => ({
       nome: yup.string().required().max(120).trim(),
       email: yup.string().email().required().max(120).trim(),
       senha: yup.string().required().max(255).trim(),
-      contato: yup.string().optional().max(13).trim(),
-      nascimento: yup.string().optional(),
+      contato: yup.string().optional().max(13).trim().nullable(),
+      nascimento: yup.string().optional().nullable(),
       notificar: yup.boolean().required(),
       administrador: yup.boolean().required(),
       empresa_id: yup.number().required(),
@@ -31,114 +31,142 @@ const cadastrarValidacao = Middlewares.validacao((getSchema) => ({
       segunda_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       segunda_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       segunda_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       segunda_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       terca_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       terca_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       terca_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       terca_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quarta_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quarta_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quarta_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quarta_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quinta_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quinta_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quinta_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       quinta_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sexta_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sexta_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sexta_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sexta_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sabado_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sabado_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sabado_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       sabado_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       domingo_inicio_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       domingo_saida_1: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       domingo_inicio_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
       domingo_saida_2: yup
         .string()
         .optional()
+        .nullable()
         .matches(/^([01]\d|2[0-3]):([0-5]\d):00$/, 'Formato inválido (HH:MM:00)'),
     }),
   ),
