@@ -31,4 +31,5 @@ export interface IVwPontoFinal {
   folga: number; // 1 se foi folga, 0 caso contrário
   feriado: number; // 1 se foi feriado, 0 caso contrário
   justificativa: number; // 1 se houve justificativa, 0 caso contrário
+  divergencia: number; // 1 se houve divergência, 0 caso contrário
 }

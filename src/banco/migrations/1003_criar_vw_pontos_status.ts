@@ -36,9 +36,27 @@ export async function up(knex: Knex): Promise<void> {
             AND NOT EXISTS (SELECT 1 FROM justificativas j WHERE j.usuario_id = pb.usuario_id AND j.data = pb.data)
             AND NOT EXISTS (SELECT 1 FROM feriados f WHERE f.data = pb.data),
             1, 0
-        ) AS falta
+        ) AS falta,
 
-    FROM vw_pontos_base pb;
+        -- Divergência: Calcula apenas se NÃO for feriado, justificativa, folga ou falta
+        IF(
+            pb.data <= CURDATE()
+            AND NOT EXISTS (SELECT 1 FROM feriados f WHERE f.data = pb.data)
+            AND NOT EXISTS (SELECT 1 FROM justificativas j WHERE j.usuario_id = pb.usuario_id AND j.data = pb.data)
+            AND pb.esperado_inicio_1 IS NOT NULL -- Se há horário esperado, significa que não é folga
+            AND pb.esperado_saida_1 IS NOT NULL
+            AND pb.entrada_1 IS NOT NULL -- Se há registro, não é falta
+            AND ABS(
+                COALESCE(
+                    TIME_TO_SEC(TIMEDIFF(pt.total_trabalhado, pt.total_esperado)), 
+                    0
+                )
+            ) > 600, 
+            1, 0
+        ) AS divergencia
+
+    FROM vw_pontos_base pb
+    JOIN vw_pontos_trabalho pt ON pb.ponto_id = pt.ponto_id;
   `);
 
   Util.log.info(`# Criado view vw_pontos_status`);

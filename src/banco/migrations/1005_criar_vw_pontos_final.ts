@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
         pt.periodo_1, pt.periodo_2, pt.periodo_extra, pt.total_trabalhado, pt.total_esperado,
         psaldo.saldo_dia, psaldo.saldo_acumulado,
 
-        pstatus.falta, pstatus.folga, pstatus.feriado, pstatus.justificativa
+        pstatus.falta, pstatus.folga, pstatus.feriado, pstatus.justificativa, pstatus.divergencia
 
     FROM vw_pontos_base pb
     JOIN vw_pontos_trabalho pt ON pb.ponto_id = pt.ponto_id
