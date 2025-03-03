@@ -3,7 +3,7 @@ import moment from 'moment';
 import { ETableNames } from '../banco/eTableNames';
 import { Knex } from '../banco/knex';
 import { IPonto } from '../banco/models/ponto';
-import { IVwPonto } from '../banco/models/vwPonto';
+import { IVwPontoFinal } from '../banco/models/vwPontoFinal';
 
 import { Util } from '../util';
 
@@ -55,9 +55,9 @@ const atualizarRegistro = async (ponto: Omit<IPonto, 'created_at' | 'id'>): Prom
   }
 };
 
-const buscarPontos = async (filtros: IFiltros): Promise<IVwPonto[]> => {
+const buscarPontos = async (filtros: IFiltros): Promise<IVwPontoFinal[]> => {
   try {
-    let query = Knex.table(ETableNames.vw_pontos).select('*');
+    let query = Knex.table(ETableNames.vw_pontos_final).select('*');
 
     if (filtros.usuario_id) {
       query = query.where('usuario_id', filtros.usuario_id);
