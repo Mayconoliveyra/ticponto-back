@@ -106,7 +106,7 @@ const consultarValidacao = Middlewares.validacao((getSchema) => ({
   ),
 }));
 
-const consultarPontos = async (req: Request, res: Response) => {
+const consultar = async (req: Request, res: Response) => {
   try {
     const { usuario_id, data_inicio, data_fim, paginacao, limite } = req.query;
 
@@ -129,4 +129,4 @@ const consultarPontos = async (req: Request, res: Response) => {
   }
 };
 
-export const Ponto = { registrarValidacao, registrar, consultarValidacao, consultarPontos };
+export const Ponto = { registrarValidacao, registrar, consultarValidacao, consultar };

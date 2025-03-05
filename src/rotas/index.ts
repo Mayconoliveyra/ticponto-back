@@ -14,6 +14,6 @@ router.post('/usuario', /* Middlewares.autenticado, */ Controladores.Usuario.cad
 router.post('/entrar', Controladores.Usuario.loginValidacao, Controladores.Usuario.login);
 
 router.post('/ponto/:id', Middlewares.autenticado, Controladores.Ponto.registrarValidacao, Controladores.Ponto.registrar);
-router.get('/pontos', Middlewares.autenticado, Controladores.Ponto.consultarValidacao, Controladores.Ponto.consultarPontos);
+router.get('/pontos', Middlewares.autenticado, Controladores.Ponto.consultarValidacao, Controladores.Ponto.consultar);
 
 export { router };
