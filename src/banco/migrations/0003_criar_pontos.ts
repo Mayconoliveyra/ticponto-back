@@ -29,7 +29,8 @@ export async function up(knex: Knex) {
 
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
       table.timestamp('updated_at').defaultTo(knex.raw('NULL ON UPDATE CURRENT_TIMESTAMP'));
-      table.timestamp('deleted_at').nullable();
+
+      table.unique(['usuario_id', 'data']); // Garantir que só tenha um registro por dia
     })
     .then(() => {
       Util.log.info(`# Criado tabela ${ETableNames.pontos}`);

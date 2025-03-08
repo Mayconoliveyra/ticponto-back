@@ -13,8 +13,6 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now()).nullable();
     table.timestamp('deleted_at').nullable();
-
-    table.unique(['usuario_id', 'data']); // Garantir que um usuário só pode ter uma justificativa por dia
   });
 }
 

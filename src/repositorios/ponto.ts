@@ -36,7 +36,7 @@ const registrar = async (ponto: Omit<IPonto, 'created_at' | 'id'>): Promise<bool
 // Buscar registro do dia
 const buscarRegistroPorData = async (usuario_id: number, data: string): Promise<IPonto | null> => {
   try {
-    const registro = await Knex(ETableNames.pontos).where({ usuario_id, data }).whereNull('deleted_at').first();
+    const registro = await Knex(ETableNames.pontos).where({ usuario_id, data }).first();
 
     return registro ?? null; // Retorna null caso seja undefined
   } catch (error) {

@@ -28,4 +28,15 @@ const buscarPorEmail = async (email: string): Promise<IUsuario | null> => {
   }
 };
 
-export const Usuario = { cadastrar, buscarPorEmail };
+const buscarPorId = async (id: number): Promise<IUsuario | null> => {
+  try {
+    const usuario = await Knex(ETableNames.usuarios).select('*').where('id', id).first();
+
+    return usuario || null;
+  } catch (error) {
+    Util.log.error('Erro ao buscar usuário por id', error);
+    return null;
+  }
+};
+
+export const Usuario = { cadastrar, buscarPorEmail, buscarPorId };

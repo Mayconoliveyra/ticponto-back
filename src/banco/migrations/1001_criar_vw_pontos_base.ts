@@ -13,11 +13,9 @@ export async function up(knex: Knex): Promise<void> {
         p.entrada_1, p.saida_1, p.entrada_2, p.saida_2,
         p.extra_entrada, p.extra_saida,
         p.esperado_inicio_1, p.esperado_saida_1, 
-        p.esperado_inicio_2, p.esperado_saida_2,
-        p.created_at, p.updated_at, p.deleted_at
+        p.esperado_inicio_2, p.esperado_saida_2
     FROM pontos p
-    JOIN usuarios u ON p.usuario_id = u.id
-    WHERE p.deleted_at IS NULL;
+    JOIN usuarios u ON p.usuario_id = u.id;
   `);
 
   Util.log.info(`# Criado view vw_pontos_base`);
