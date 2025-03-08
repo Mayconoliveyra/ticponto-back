@@ -10,7 +10,7 @@ interface IJwtData {
 
 const entrar = (data: IJwtData): { token: string; exp: number } | 'JWT_SECRET_NOT_FOUND' => {
   if (!process.env.JWT_SECRET) {
-    Util.log.error('entrar > process.env.JWT_SECRET não está definido');
+    Util.Log.error('entrar > process.env.JWT_SECRET não está definido');
     return 'JWT_SECRET_NOT_FOUND';
   }
 
@@ -28,7 +28,7 @@ const entrar = (data: IJwtData): { token: string; exp: number } | 'JWT_SECRET_NO
 
 const verificar = (token: string): IJwtData | 'JWT_SECRET_NOT_FOUND' | 'INVALID_TOKEN' => {
   if (!process.env.JWT_SECRET) {
-    Util.log.error('verificar > process.env.JWT_SECRET não está definido');
+    Util.Log.error('verificar > process.env.JWT_SECRET não está definido');
     return 'JWT_SECRET_NOT_FOUND';
   }
 

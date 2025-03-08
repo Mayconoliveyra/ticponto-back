@@ -38,7 +38,7 @@ const customLogger = (level: string, message: string, additional?: any) => {
   logger.log({ level, message: formattedMessage });
 };
 
-export const log = {
+export const Log = {
   info: (message: string, additional?: any) => customLogger('info', message, additional),
   error: (message: string, additional?: any) => customLogger('error', message, additional),
   warn: (message: string, additional?: any) => customLogger('warn', message, additional),

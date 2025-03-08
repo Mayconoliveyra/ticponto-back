@@ -31,7 +31,7 @@ export async function up(knex: Knex): Promise<void> {
     FROM vw_pontos_base pb;
   `);
 
-  Util.log.info(`# Criado view vw_pontos_trabalho`);
+  Util.Log.info(`# Criado view vw_pontos_trabalho`);
 }
 
 export async function down(knex: Knex): Promise<void> {

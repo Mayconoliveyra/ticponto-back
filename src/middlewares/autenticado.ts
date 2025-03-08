@@ -57,7 +57,7 @@ const autenticado: RequestHandler = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    Util.log.error('Falha ao executar: autenticado', error);
+    Util.Log.error('Falha ao executar: autenticado', error);
   }
 };
 

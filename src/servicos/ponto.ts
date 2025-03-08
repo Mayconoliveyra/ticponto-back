@@ -15,7 +15,7 @@ const gerarRegistrosPonto = async (usuarioId: number) => {
     const horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuarioId, dataAtual);
 
     if (!horariosEsperados) {
-      Util.log.error(`Nenhum horário esperado encontrado para ${usuarioId} em ${dataAtual}`);
+      Util.Log.error(`Nenhum horário esperado encontrado para ${usuarioId} em ${dataAtual}`);
 
       continue;
     }

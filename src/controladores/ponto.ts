@@ -80,7 +80,7 @@ const registrar = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    Util.log.error('Erro ao registrar ponto', error);
+    Util.Log.error('Erro ao registrar ponto', error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       erro: 'Erro interno ao registrar ponto',
     });
@@ -122,7 +122,7 @@ const consultar = async (req: Request, res: Response) => {
 
     return res.status(StatusCodes.OK).json(pontos);
   } catch (error) {
-    Util.log.error('Erro ao buscar pontos', error);
+    Util.Log.error('Erro ao buscar pontos', error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: { default: 'Erro ao buscar pontos.' },
     });

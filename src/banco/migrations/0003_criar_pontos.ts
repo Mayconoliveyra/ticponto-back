@@ -33,12 +33,12 @@ export async function up(knex: Knex) {
       table.unique(['usuario_id', 'data']); // Garantir que só tenha um registro por dia
     })
     .then(() => {
-      Util.log.info(`# Criado tabela ${ETableNames.pontos}`);
+      Util.Log.info(`# Criado tabela ${ETableNames.pontos}`);
     });
 }
 
 export async function down(knex: Knex) {
   return knex.schema.dropTable(ETableNames.pontos).then(() => {
-    Util.log.info(`# Excluído tabela ${ETableNames.pontos}`);
+    Util.Log.info(`# Excluído tabela ${ETableNames.pontos}`);
   });
 }

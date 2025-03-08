@@ -42,7 +42,7 @@ export async function up(knex: Knex): Promise<void> {
     JOIN vw_pontos_status ps ON pt.ponto_id = ps.ponto_id;
   `);
 
-  Util.log.info(`# Criado view vw_pontos_saldos`);
+  Util.Log.info(`# Criado view vw_pontos_saldos`);
 }
 
 export async function down(knex: Knex): Promise<void> {

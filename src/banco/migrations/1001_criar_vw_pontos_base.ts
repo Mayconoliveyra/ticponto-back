@@ -18,7 +18,7 @@ export async function up(knex: Knex): Promise<void> {
     JOIN usuarios u ON p.usuario_id = u.id;
   `);
 
-  Util.log.info(`# Criado view vw_pontos_base`);
+  Util.Log.info(`# Criado view vw_pontos_base`);
 }
 
 export async function down(knex: Knex): Promise<void> {

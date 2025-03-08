@@ -9,7 +9,7 @@ const gerarHashSenha = async (senha: string) => {
     const saltGerado = await genSalt(SALT_RANDOMS);
     return await hash(senha, saltGerado);
   } catch (error) {
-    Util.log.error('Erro ao gerar hash da senha', error);
+    Util.Log.error('Erro ao gerar hash da senha', error);
     return null;
   }
 };
@@ -18,7 +18,7 @@ const verificarSenha = async (senha: string, senhaHasheada: string) => {
   try {
     return await compare(senha, senhaHasheada);
   } catch (error) {
-    Util.log.error('Erro ao verificar a senha', error);
+    Util.Log.error('Erro ao verificar a senha', error);
     return false;
   }
 };

@@ -17,12 +17,12 @@ export async function up(knex: Knex) {
       table.timestamp('deleted_at').nullable();
     })
     .then(() => {
-      Util.log.info(`# Criado tabela ${ETableNames.empresas}`);
+      Util.Log.info(`# Criado tabela ${ETableNames.empresas}`);
     });
 }
 
 export async function down(knex: Knex) {
   return knex.schema.dropTable(ETableNames.empresas).then(() => {
-    Util.log.info(`# Excluído tabela ${ETableNames.empresas}`);
+    Util.Log.info(`# Excluído tabela ${ETableNames.empresas}`);
   });
 }

@@ -23,7 +23,7 @@ export async function up(knex: Knex): Promise<void> {
     JOIN vw_pontos_status pstatus ON pb.ponto_id = pstatus.ponto_id;
   `);
 
-  Util.log.info(`# Criado view ${ETableNames.vw_pontos_final}`);
+  Util.Log.info(`# Criado view ${ETableNames.vw_pontos_final}`);
 }
 
 export async function down(knex: Knex): Promise<void> {

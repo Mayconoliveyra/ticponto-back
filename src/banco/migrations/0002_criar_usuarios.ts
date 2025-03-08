@@ -34,12 +34,12 @@ export async function up(knex: Knex) {
       table.timestamp('deleted_at').nullable();
     })
     .then(() => {
-      Util.log.info(`# Criado tabela ${ETableNames.usuarios}`);
+      Util.Log.info(`# Criado tabela ${ETableNames.usuarios}`);
     });
 }
 
 export async function down(knex: Knex) {
   return knex.schema.dropTable(ETableNames.usuarios).then(() => {
-    Util.log.info(`# Excluído tabela ${ETableNames.usuarios}`);
+    Util.Log.info(`# Excluído tabela ${ETableNames.usuarios}`);
   });
 }

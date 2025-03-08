@@ -11,7 +11,7 @@ const cadastrar = async (usuario: Omit<IUsuario, 'id' | 'ativo' | 'created_at' |
     // Retorna o ID do usuário recém-criado
     return result[0] || null;
   } catch (error) {
-    Util.log.error('Falha ao cadastrar usuário', error);
+    Util.Log.error('Falha ao cadastrar usuário', error);
 
     return null;
   }
@@ -23,7 +23,7 @@ const buscarPorEmail = async (email: string): Promise<IUsuario | null> => {
 
     return usuario || null;
   } catch (error) {
-    Util.log.error('Erro ao buscar usuário por email', error);
+    Util.Log.error('Erro ao buscar usuário por email', error);
     return null;
   }
 };
@@ -34,7 +34,7 @@ const buscarPorId = async (id: number): Promise<IUsuario | null> => {
 
     return usuario || null;
   } catch (error) {
-    Util.log.error('Erro ao buscar usuário por id', error);
+    Util.Log.error('Erro ao buscar usuário por id', error);
     return null;
   }
 };

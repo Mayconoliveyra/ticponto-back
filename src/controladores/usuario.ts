@@ -289,7 +289,7 @@ const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
       });
     }
   } catch (error) {
-    Util.log.error('Erro ao cadastrar usuário', error);
+    Util.Log.error('Erro ao cadastrar usuário', error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: { default: 'Erro interno ao cadastrar usuário' },
     });
@@ -323,7 +323,7 @@ const login = async (req: Request, res: Response) => {
     const token = Servicos.JWT.entrar({ id: usuario.id, name: usuario.nome, email: usuario.email });
     return res.status(StatusCodes.OK).json(token);
   } catch (error) {
-    Util.log.error('Erro ao realizar login', error);
+    Util.Log.error('Erro ao realizar login', error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: { default: 'Erro interno ao realizar login' },
     });

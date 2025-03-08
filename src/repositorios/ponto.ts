@@ -28,7 +28,7 @@ const registrar = async (ponto: Omit<IPonto, 'created_at' | 'id'>): Promise<bool
   try {
     return await Knex(ETableNames.pontos).insert(ponto);
   } catch (error) {
-    Util.log.error('Erro ao registrar ponto', error);
+    Util.Log.error('Erro ao registrar ponto', error);
     return false;
   }
 };
@@ -40,7 +40,7 @@ const buscarRegistroPorData = async (usuario_id: number, data: string): Promise<
 
     return registro ?? null; // Retorna null caso seja undefined
   } catch (error) {
-    Util.log.error('Erro ao buscar registro de ponto', error);
+    Util.Log.error('Erro ao buscar registro de ponto', error);
     return null;
   }
 };
@@ -50,7 +50,7 @@ const atualizarRegistro = async (ponto: Omit<IPonto, 'created_at' | 'id'>): Prom
   try {
     return await Knex(ETableNames.pontos).where({ usuario_id: ponto.usuario_id, data: ponto.data }).update(ponto);
   } catch (error) {
-    Util.log.error('Erro ao atualizar ponto', error);
+    Util.Log.error('Erro ao atualizar ponto', error);
     return false;
   }
 };
@@ -75,7 +75,7 @@ const buscarPontos = async (filtros: IFiltros): Promise<IVwPontoFinal[]> => {
 
     return await query;
   } catch (error) {
-    Util.log.error('Erro ao buscar pontos', error);
+    Util.Log.error('Erro ao buscar pontos', error);
     return [];
   }
 };
@@ -129,7 +129,7 @@ const excluirRegistrosFuturosSemPonto = async (usuarioId: number, dataAtual: str
       .whereNull('extra_saida') // Exclui apenas registros sem marcações
       .delete();
   } catch (error) {
-    Util.log.error('Erro ao excluir registros futuros sem ponto', error);
+    Util.Log.error('Erro ao excluir registros futuros sem ponto', error);
   }
 };
 
