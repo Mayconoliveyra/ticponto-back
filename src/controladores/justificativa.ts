@@ -65,40 +65,6 @@ const cadastrar = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
   }
 };
 
-const alterarValidacao = Middlewares.validacao((getSchema) => ({
-  body: getSchema<IBodyProps>(
-    yup.object().shape({
-      usuario_id: yup.number().required(),
-      data: yup
-        .string()
-        .required()
-        .matches(/^\d{4}-\d{2}-\d{2}$/, 'Formato de data inválido (YYYY-MM-DD)'),
-      motivo: yup.string().required().trim().max(255),
-      anexo: yup.string().nullable().max(255),
-    }),
-  ),
-  params: getSchema<{ id: number }>(
-    yup.object().shape({
-      id: yup.number().required(),
-    }),
-  ),
-}));
-
-const alterar = async (req: Request<{ id: number }, {}, IBodyProps>, res: Response) => {
-  const { id } = req.params;
-  const { usuario_id, data, motivo, anexo } = req.body;
-
-  const result = await Repositorios.Justificativa.alterar(id, { usuario_id, data, motivo, anexo });
-
-  if (result) {
-    return res.status(StatusCodes.NO_CONTENT).send();
-  } else {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: { default: 'Erro ao alterar justificativa' },
-    });
-  }
-};
-
 const excluirValidacao = Middlewares.validacao((getSchema) => ({
   params: getSchema<{ id: number }>(
     yup.object().shape({
@@ -107,8 +73,15 @@ const excluirValidacao = Middlewares.validacao((getSchema) => ({
   ),
 }));
 
-const excluir = async (req: Request<{ id: number }>, res: Response) => {
-  const { id } = req.params;
+const excluir = async (req: Request<{ id: string }>, res: Response) => {
+  const id = Number(req.params.id);
+
+  const justificativa = await Repositorios.Justificativa.buscarPorId(id);
+  if (!justificativa) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      errors: { default: 'Justificativa não encontrada' },
+    });
+  }
 
   const result = await Repositorios.Justificativa.excluir(id);
 
@@ -121,4 +94,4 @@ const excluir = async (req: Request<{ id: number }>, res: Response) => {
   }
 };
 
-export const Justificativa = { cadastrarValidacao, cadastrar, alterarValidacao, alterar, excluirValidacao, excluir };
+export const Justificativa = { cadastrarValidacao, cadastrar, excluirValidacao, excluir };

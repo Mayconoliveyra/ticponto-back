@@ -17,7 +17,6 @@ router.post('/ponto/:id', Middlewares.autenticado, Controladores.Ponto.registrar
 router.get('/pontos', Middlewares.autenticado, Controladores.Ponto.consultarValidacao, Controladores.Ponto.consultar);
 
 router.post('/justificativa', Middlewares.autenticado, Controladores.Justificativa.cadastrarValidacao, Controladores.Justificativa.cadastrar);
-/* router.put('/justificativa/:id', Middlewares.autenticado, Controladores.Justificativa.alterarValidacao, Controladores.Justificativa.alterar);
-router.delete('/justificativa/:id', Middlewares.autenticado, Controladores.Justificativa.excluirValidacao, Controladores.Justificativa.excluir); */
+router.delete('/justificativa/:id', Middlewares.autenticado, Controladores.Justificativa.excluirValidacao, Controladores.Justificativa.excluir);
 
 export { router };

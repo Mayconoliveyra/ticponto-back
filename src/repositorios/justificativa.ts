@@ -13,15 +13,6 @@ const cadastrar = async (justificativa: Omit<IJustificativa, 'id' | 'created_at'
   }
 };
 
-const alterar = async (id: number, justificativa: Omit<IJustificativa, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>) => {
-  try {
-    return await Knex.table(ETableNames.justificativas).where({ id }).update(justificativa);
-  } catch (error) {
-    Util.Log.error('Falha ao alterar justificativa', error);
-    return false;
-  }
-};
-
 const excluir = async (id: number) => {
   try {
     const dataAtual = Util.DataHora.obterDataAtual();
@@ -42,4 +33,17 @@ const buscarPorUsuarioEData = async (usuario_id: number, data: string) => {
   }
 };
 
-export const Justificativa = { cadastrar, alterar, excluir, buscarPorUsuarioEData };
+const buscarPorId = async (id: number) => {
+  try {
+    const justificativa = await Knex(ETableNames.justificativas)
+      .where({ id })
+      .whereNull('deleted_at') // Ignora registros excluídos
+      .first();
+
+    return justificativa || null;
+  } catch (error) {
+    Util.Log.error('Erro ao buscar justificativa por ID', error);
+    return null;
+  }
+};
+export const Justificativa = { cadastrar, excluir, buscarPorUsuarioEData, buscarPorId };
