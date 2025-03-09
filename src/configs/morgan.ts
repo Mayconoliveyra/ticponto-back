@@ -1,8 +1,9 @@
 import { Express } from 'express';
 import fs from 'fs';
-import moment from 'moment';
 import morganBody from 'morgan-body';
 import path from 'path';
+
+import { Util } from '../util';
 
 // Define o diretório de logs e cria-o, se necessário
 const logDir = path.join('log');
@@ -11,7 +12,7 @@ if (!fs.existsSync(logDir)) {
 }
 
 // Cria um stream para gravar os logs em um arquivo com a data atual
-const logStream = fs.createWriteStream(path.join(logDir, `express-${moment().format('YYYY-MM-DD')}.log`), { flags: 'a' });
+const logStream = fs.createWriteStream(path.join(logDir, `express-${Util.DataHora.obterDataAtual('DD-MM-YYYY')}.log`), { flags: 'a' });
 
 const setupMorganBody = (app: Express) => {
   morganBody(app, {

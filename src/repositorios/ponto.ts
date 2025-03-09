@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import { ETableNames } from '../banco/eTableNames';
 import { Knex } from '../banco/knex';
 import { IPonto } from '../banco/models/ponto';
@@ -82,7 +80,7 @@ const buscarPontos = async (filtros: IFiltros): Promise<IVwPontoFinal[]> => {
 
 const obterHorariosEsperados = async (usuario_id: number, data: string): Promise<IHorariosEsperados> => {
   const diasSemana = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-  const diaSemana = diasSemana[moment(data, 'YYYY-MM-DD').day()];
+  const diaSemana = diasSemana[Util.DataHora.obterDiaSemana('YYYY-MM-DD')];
 
   // Mapeamos as colunas corretamente
   const colunas = {

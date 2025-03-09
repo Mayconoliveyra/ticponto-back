@@ -1,15 +1,13 @@
-import moment from 'moment';
-
 import { Repositorios } from '../repositorios';
 
 import { Util } from '../util';
 
 const gerarRegistrosPonto = async (usuarioId: number) => {
-  const hoje = moment().format('YYYY-MM-DD');
+  const hoje = Util.DataHora.obterDataAtual('YYYY-MM-DD');
   const diasParaGerar = 90; // Gerar apenas os próximos 3 meses
 
   for (let i = 0; i < diasParaGerar; i++) {
-    const dataAtual = moment(hoje).add(i, 'days').format('YYYY-MM-DD');
+    const dataAtual = Util.DataHora.adicionarDias(hoje, i, 'YYYY-MM-DD');
 
     // Buscar horários esperados do funcionário para o dia
     const horariosEsperados = await Repositorios.Ponto.obterHorariosEsperados(usuarioId, dataAtual);

@@ -1,7 +1,8 @@
 import fs from 'fs';
-import moment, { MomentInput } from 'moment';
 import path from 'path';
 import winston from 'winston';
+
+import { DataHora } from './dataHora';
 
 // Diretório de logs
 const logDir = path.join('log');
@@ -9,7 +10,8 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
-const date = moment().format('DD-MM-YYYY');
+const date = DataHora.obterDataAtual('DD-MM-YYYY');
+
 const logFile = path.join(logDir, `log-${date}.log`);
 
 const fileTransport = new winston.transports.File({ filename: logFile, level: 'info' });
@@ -18,7 +20,7 @@ const logFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.errors({ stack: true }),
   winston.format.printf(({ timestamp, level, message }) => {
-    const time = moment(timestamp as MomentInput).format('DD/MM/YYYY HH:mm:ss');
+    const time = DataHora.formatarDataHora(String(timestamp), 'DD/MM/YYYY HH:mm:ss');
     return `${time} [${level.toUpperCase()}]: ${message}`;
   }),
 );

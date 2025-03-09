@@ -24,7 +24,9 @@ const alterar = async (id: number, justificativa: Omit<IJustificativa, 'id' | 'c
 
 const excluir = async (id: number) => {
   try {
-    return await Knex.table(ETableNames.justificativas).where({ id }).delete();
+    const dataAtual = Util.DataHora.obterDataAtual();
+
+    return await Knex(ETableNames.justificativas).where({ id }).update({ deleted_at: dataAtual });
   } catch (error) {
     Util.Log.error('Falha ao excluir justificativa', error);
     return false;

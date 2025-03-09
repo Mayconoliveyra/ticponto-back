@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import moment from 'moment';
 import * as yup from 'yup';
 
 import { IPonto } from '../banco/models/ponto';
@@ -32,8 +31,8 @@ const registrarValidacao = Middlewares.validacao((getSchema) => ({
 const registrar = async (req: Request, res: Response) => {
   try {
     const usuario = (req as any).usuario as IUsuario;
-    const dataAtual = moment().format('YYYY-MM-DD');
-    const horaAtual = moment().format('HH:mm:00');
+    const dataAtual = Util.DataHora.obterDataAtual('YYYY-MM-DD');
+    const horaAtual = Util.DataHora.obterDataAtual('HH:mm:00');
 
     // Buscar o registro do dia (agora já existe sempre)
     const registroAtual: IPonto | null = await Repositorios.Ponto.buscarRegistroPorData(usuario.id, dataAtual);
